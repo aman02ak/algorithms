@@ -92,3 +92,87 @@ int main()
 	}
 	return fcurr;
 }*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////	METHOD -2 //////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include<bits/stdc++.h>
+#define REP(i, n) for(int i=0; i<n; i++)
+using namespace std;
+
+typedef long long ll;
+typedef vector<vector<ll>> matrix;
+
+const int K = 2;
+
+matrix mul(matrix A, matrix B)
+{
+	matrix C(K, vector<ll>(K));
+	REP(i, K)
+		REP(j, K)
+			REP(k, K)
+				C[i][j] += A[i][k]*B[k][j];
+	return C;
+}
+
+matrix pow(matrix A, int p)
+{
+	if(p==1)
+		return A;
+	matrix ans;
+	if(p%2 == 0)
+	{
+		ans = pow(A, p/2);
+		ans = mul(ans,ans);
+	}
+	else
+	{
+		ans = pow(A, (p-1)/2);
+		ans = mul(ans,ans);
+		ans = mul(ans,A);
+	}
+	return ans;
+}
+
+ll fib(int n)
+{
+	if(n == 0 || n == 1)
+		return 1;
+	
+	matrix T(K, vector<ll>(K));
+	T[0][0] = 0, T[0][1] = 1;
+    T[1][0] = 1, T[1][1] = 1;
+	T = pow(T, n);
+
+	vector<ll> F1(K+1);
+    F1[1] = 1;
+    F1[2] = 1;
+	ll res = 0;
+    REP(i, K)
+        res = (res + T[1][i] * F1[i]);
+    return res;
+}
+
+
+void call();
+int main()
+{
+    call();
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        int n;
+        cin >> n; //find nth fibonaci number, a[n]
+        cout << "Answer : " << fib(n-1) << endl;
+    }
+    return 0;
+}
+
+void call()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+#endif
+}
