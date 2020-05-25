@@ -97,76 +97,73 @@ int main()
 ///////////////////////////////////	METHOD -2 //////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include<bits/stdc++.h>
-#define REP(i, n) for(int i=0; i<n; i++)
+#define RES(i,n) for(int i=0; i<n; i++)
 using namespace std;
 
 typedef long long ll;
 typedef vector<vector<ll>> matrix;
+int const K = 2;
 
-const int K = 2;
-
+void call();
 matrix mul(matrix A, matrix B)
 {
-	matrix C(K, vector<ll>(K));
-	REP(i, K)
-		REP(j, K)
-			REP(k, K)
-				C[i][j] += A[i][k]*B[k][j];
-	return C;
+	matrix res(K, vector<ll>(K));
+	RES(i, K) RES(j, K) RES(k, K)
+		res[i][j] += A[i][k]*B[k][j];
+
+	return res;
 }
 
-matrix pow(matrix A, int p)
+matrix pow(matrix A, ll n)
 {
-	if(p==1)
+	if(n == 1)
 		return A;
-	matrix ans;
-	if(p%2 == 0)
+	matrix retMat;
+	if(n%2 == 0)
 	{
-		ans = pow(A, p/2);
-		ans = mul(ans,ans);
+		retMat = pow(A, n/2);
+		retMat = mul(retMat, retMat);
 	}
 	else
 	{
-		ans = pow(A, (p-1)/2);
-		ans = mul(ans,ans);
-		ans = mul(ans,A);
+		retMat = pow(A, (n-1)/2);
+		retMat = mul(retMat, retMat);
+		retMat = mul(retMat, A);
 	}
-	return ans;
+	return retMat;
 }
 
-ll fib(int n)
+ll fib(ll n)
 {
 	if(n == 0 || n == 1)
 		return 1;
-	
+
 	matrix T(K, vector<ll>(K));
 	T[0][0] = 0, T[0][1] = 1;
-    T[1][0] = 1, T[1][1] = 1;
+	T[1][0] = 1, T[1][1] = 1;
 	T = pow(T, n);
 
-	vector<ll> F1(K+1);
-    F1[1] = 1;
-    F1[2] = 1;
-	ll res = 0;
-    REP(i, K)
-        res = (res + T[1][i] * F1[i]);
-    return res;
+	vector<int> v(K+1);
+	v[0] = 1;
+	v[1] = 1;
+	ll ans = 0;
+	ans = v[1]*T[1][1];
+	return ans;
 }
 
-
-void call();
 int main()
 {
-    call();
-    int t;
-    cin >> t;
-    while(t--)
-    {
-        int n;
-        cin >> n; //find nth fibonaci number, a[n]
-        cout << "Answer : " << fib(n-1) << endl;
-    }
-    return 0;
+	call();
+	int t;
+	cin >> t;
+	while(t--)
+	{
+		ll n;
+		cin >> n;
+		cin.ignore();
+		cout << "Answer : " << fib(n-1) << endl;
+	}
+	return 0;
 }
 
 void call()
